@@ -31,7 +31,9 @@ import com.gmail.edugsdf.models.Product;
 import com.gmail.edugsdf.services.ProductService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 
 @Api(value = "API REST - Model Product")
@@ -47,7 +49,6 @@ public class ProductResource {
 	}	
 	
 	@ApiOperation(value = "Find all products in database ")
-	//@GetMapping(produces = "application/json")
 	@GetMapping()
 	public @ResponseBody ResponseEntity<?> findAll() {
 		List<Product> list = productService.findAll();
@@ -66,9 +67,10 @@ public class ProductResource {
 	}
 	
 	@ApiOperation(value = "Find products by filter")
+	@ApiModelProperty(value = "status", example = "push")
 	@RequestMapping(value="search", method = RequestMethod.GET)
 	@ResponseBody	
-	public ResponseEntity<?> findWithFilter(@RequestParam Map<String,String> allParams) {
+	public ResponseEntity<?> findWithFilter(@ApiParam(value = "q=any term, min_price or max_price", required = false) @RequestParam Map<String,String> allParams) {
 		String nameOrDescription = allParams.get("q") != null ? allParams.get("q") : "";
 		BigDecimal min_price = allParams.get("min_price") != null ? new BigDecimal(allParams.get("min_price")) : null;
 		BigDecimal max_price = allParams.get("max_price") != null ? new BigDecimal(allParams.get("max_price")) : null;
